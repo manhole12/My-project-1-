@@ -13,6 +13,6 @@ public class destroy : MonoBehaviour
     }
     void Update()
     {
-
+        //¾È³ç
     }
 }
