@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class move : MonoBehaviour
 {
@@ -68,5 +69,14 @@ public class move : MonoBehaviour
     void OnTriggerExit2D(Collider2D collision)
     { // 발에 아무 것도 닿지 않으면 
         groundFlag = false;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("door") && worldmanager.finishable)
+        {
+            this.gameObject.SetActive(false);
+            Time.timeScale = 0;
+            worldmanager.isfinish = true;
+        }
     }
 }

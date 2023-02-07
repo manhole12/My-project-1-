@@ -15,6 +15,7 @@ public class key : MonoBehaviour
             GameObject _Key = GameObject.Find(collision.gameObject.name);
             if (_Key != null)
             {
+                counter.value += 1;
                 Destroy(this.gameObject);
             }
 

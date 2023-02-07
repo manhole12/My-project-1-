@@ -12,6 +12,9 @@ public class monstermove : MonoBehaviour
     Rigidbody2D rigdBody;
 
     public GameObject goTarget;
+    public int hp = 3;
+    [SerializeField]
+    public int range = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -26,19 +29,40 @@ public class monstermove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 dir = (goTarget.transform.position - this.transform.position).normalized;
+        float dest_x = goTarget.transform.position.x - this.transform.position.x;
+        float dest_y = goTarget.transform.position.y - this.transform.position.y;
 
-        float vx = dir.x * speed;
-        float vy = dir.y * speed;
+        if (dest_x * dest_x + dest_y * dest_y <= range * range)
+        {
+            Vector3 dir = (goTarget.transform.position - this.transform.position).normalized;
 
-        rigdBody.velocity = new Vector2(vx, vy);
+            float vx = dir.x * speed;
+            float vy = dir.y * speed;
 
-        this.GetComponent<SpriteRenderer>().flipX = (vx < 0);
+            rigdBody.velocity = new Vector2(vx, vy);
+
+            this.GetComponent<SpriteRenderer>().flipX = (vx < 0);
+        }
+        else
+        {
+            float vx = 1 * speed;
+
+            if (this.GetComponent<SpriteRenderer>().flipX)
+            {
+                vx = -1 * speed;
+            }
+
+            rigdBody.velocity = new Vector2(vx, 0);
+        }
+
+        if (hp == 0)
+        {
+            Destroy(this.gameObject);
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        speed = -speed;
-        this.GetComponent<SpriteRenderer>().flipX = (speed < 0);
+        this.GetComponent<SpriteRenderer>().flipX = !this.GetComponent<SpriteRenderer>().flipX;
 
         if (collision.gameObject.name == goTarget.name)
         {
@@ -46,9 +70,14 @@ public class monstermove : MonoBehaviour
             if (_goTarget != null)
             {
                 _goTarget.SetActive(false);
+                Time.timeScale = 0;
+                worldmanager.isover = true;
             }
 
         }
-
+        if (collision.gameObject.CompareTag("boom"))
+        {
+            hp--;
+        }
     }
 }
