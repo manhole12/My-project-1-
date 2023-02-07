@@ -11,4 +11,8 @@ public class destroy : MonoBehaviour
     { // 처음에 시행한다
         Destroy(this.gameObject, limitSec); // 지정 초 후에 소멸하는 예약 
     }
+    void Update()
+    {
+
+    }
 }
